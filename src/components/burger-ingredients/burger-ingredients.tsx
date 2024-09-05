@@ -13,15 +13,16 @@ import {
 export const BurgerIngredients: FC = () => {
   /** TODO: взять переменные из стора */
   const ingredients = useSelector(selectorIngredients);
+  //console.log(ingredients);
   const isLoading = useSelector(selectorIsLoading);
 
-  const buns: TIngredient[] = ingredients.filter((item) => item.type === 'bun');
-  const mains: TIngredient[] = ingredients.filter(
-    (item) => item.type === 'main'
-  );
-  const sauces: TIngredient[] = ingredients.filter(
-    (item) => item.type === 'sauce'
-  );
+  if (isLoading) {
+    return <Preloader />;
+  }
+
+  const buns = ingredients.filter((item) => item.type === 'bun');
+  const mains = ingredients.filter((item) => item.type === 'main');
+  const sauces = ingredients.filter((item) => item.type === 'sauce');
 
   const [currentTab, setCurrentTab] = useState<TTabMode>('bun');
   const titleBunRef = useRef<HTMLHeadingElement>(null);
