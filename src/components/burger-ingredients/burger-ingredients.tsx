@@ -1,7 +1,7 @@
 import { useState, useRef, useEffect, FC } from 'react';
 import { useInView } from 'react-intersection-observer';
 
-import { TIngredient, TTabMode } from '@utils-types';
+import { TTabMode } from '@utils-types';
 import { BurgerIngredientsUI } from '../ui/burger-ingredients';
 import { useSelector } from 'react-redux';
 import { Preloader } from '../../components/ui';
@@ -13,7 +13,6 @@ import {
 export const BurgerIngredients: FC = () => {
   /** TODO: взять переменные из стора */
   const ingredients = useSelector(selectorIngredients);
-  //console.log(ingredients);
   const isLoading = useSelector(selectorIsLoading);
 
   if (isLoading) {
@@ -61,9 +60,6 @@ export const BurgerIngredients: FC = () => {
       titleSaucesRef.current?.scrollIntoView({ behavior: 'smooth' });
   };
 
-  if (isLoading) {
-    return <Preloader />;
-  }
   return (
     <BurgerIngredientsUI
       currentTab={currentTab}
