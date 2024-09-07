@@ -1,5 +1,6 @@
-import { createSlice } from '@reduxjs/toolkit';
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { TConstructorIngredient, TIngredient, TOrder } from '@utils-types';
+import { v4 as uuidv4 } from 'uuid';
 
 export interface IBurgerConstructor {
   constructorItems: {
@@ -22,7 +23,29 @@ export const initialState: IBurgerConstructor = {
 export const burgerConstructorSlice = createSlice({
   name: 'burgerConstructor',
   initialState,
-  reducers: {},
+  reducers: {
+    addIngredient: {
+      reducer: (state, action: PayloadAction<TConstructorIngredient>) => {
+        if (action.payload.type === 'bun') {
+          state.constructorItems.bun = action.payload;
+        } else {
+          state.constructorItems.ingredients.push(action.payload);
+        }
+      },
+      prepare: (ingredient) => ({
+        payload: { ...ingredient, id: uuidv4() }
+      })
+    },
+    removeIngredient: (
+      state,
+      action: PayloadAction<TConstructorIngredient>
+    ) => {
+      state.constructorItems.ingredients =
+        state.constructorItems.ingredients.filter(
+          (item) => item.id !== action.payload.id
+        );
+    }
+  },
   selectors: {
     selectorConstructorItems: (state) => state.constructorItems,
     selectorOrderRequest: (state) => state.orderRequest,
@@ -37,3 +60,6 @@ export const {
   selectorOrderRequest,
   selectorOrderModalData
 } = burgerConstructorSlice.selectors;
+
+export const { addIngredient, removeIngredient } =
+  burgerConstructorSlice.actions;
