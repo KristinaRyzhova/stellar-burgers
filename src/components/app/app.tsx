@@ -14,6 +14,10 @@ import '../../index.css';
 import styles from './app.module.css';
 
 import { AppHeader, IngredientDetails, Modal, OrderInfo } from '@components';
+import { useDispatch } from 'react-redux';
+import { AppDispatch } from 'src/services/store';
+import { useEffect } from 'react';
+import { fetchIngredients } from '../../services/slices/ingredientsSlice/ingredientsSlice';
 
 export const App = () => {
   const location = useLocation();
@@ -23,6 +27,11 @@ export const App = () => {
   const closeModal = () => {
     navigate(-1);
   };
+
+  const dispatch = useDispatch<AppDispatch>();
+  useEffect(() => {
+    dispatch(fetchIngredients());
+  }, [dispatch]);
 
   return (
     <>
