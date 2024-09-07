@@ -11,7 +11,6 @@ import {
 } from '../../services/slices/ingredientsSlice/ingredientsSlice';
 
 export const BurgerIngredients: FC = () => {
-  /** TODO: взять переменные из стора */
   const ingredients = useSelector(selectorIngredients);
   const isLoading = useSelector(selectorIsLoading);
 

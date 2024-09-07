@@ -1,7 +1,7 @@
 import { FC, useMemo } from 'react';
 import { TConstructorIngredient } from '@utils-types';
 import { BurgerConstructorUI } from '@ui';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import {
   selectorConstructorItems,
   selectorOrderModalData,
@@ -9,6 +9,7 @@ import {
 } from '../../services/slices/burgerConstructorSlice/burgerConstructorSlice';
 
 export const BurgerConstructor: FC = () => {
+  const dispatch = useDispatch();
   /** TODO: взять переменные constructorItems, orderRequest и orderModalData из стора */
   const constructorItems = useSelector(selectorConstructorItems);
   const orderRequest = useSelector(selectorOrderRequest);
