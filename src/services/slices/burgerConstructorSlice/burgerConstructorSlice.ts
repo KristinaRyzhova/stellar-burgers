@@ -44,6 +44,31 @@ export const burgerConstructorSlice = createSlice({
         state.constructorItems.ingredients.filter(
           (item) => item.id !== action.payload.id
         );
+    },
+    upIngredient: (state, action: PayloadAction<number>) => {
+      const index = action.payload;
+      const ingredients = state.constructorItems.ingredients;
+      if (index > 0) {
+        const newIngredients = [...ingredients];
+        [newIngredients[index], newIngredients[index - 1]] = [
+          newIngredients[index - 1],
+          newIngredients[index]
+        ];
+        state.constructorItems.ingredients = newIngredients;
+      }
+    },
+
+    downIngredient: (state, action: PayloadAction<number>) => {
+      const index = action.payload;
+      const ingredients = state.constructorItems.ingredients;
+      if (index < ingredients.length - 1) {
+        const newIngredients = [...ingredients];
+        [newIngredients[index], newIngredients[index + 1]] = [
+          newIngredients[index + 1],
+          newIngredients[index]
+        ];
+        state.constructorItems.ingredients = newIngredients;
+      }
     }
   },
   selectors: {
@@ -61,5 +86,5 @@ export const {
   selectorOrderModalData
 } = burgerConstructorSlice.selectors;
 
-export const { addIngredient, removeIngredient } =
+export const { addIngredient, removeIngredient, upIngredient, downIngredient } =
   burgerConstructorSlice.actions;

@@ -10,7 +10,6 @@ import { FC, useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import {
   fetchIngredients,
-  selectorIngredients,
   selectorIsLoading
 } from '../../services/slices/ingredientsSlice/ingredientsSlice';
 

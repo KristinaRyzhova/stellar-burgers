@@ -1,23 +1,12 @@
 import { useState, useRef, useEffect, FC } from 'react';
 import { useInView } from 'react-intersection-observer';
-
 import { TTabMode } from '@utils-types';
 import { BurgerIngredientsUI } from '../ui/burger-ingredients';
 import { useSelector } from 'react-redux';
-import { Preloader } from '../../components/ui';
-import {
-  selectorIngredients,
-  selectorIsLoading
-} from '../../services/slices/ingredientsSlice/ingredientsSlice';
+import { selectorIngredients } from '../../services/slices/ingredientsSlice/ingredientsSlice';
 
 export const BurgerIngredients: FC = () => {
   const ingredients = useSelector(selectorIngredients);
-  const isLoading = useSelector(selectorIsLoading);
-
-  if (isLoading) {
-    return <Preloader />;
-  }
-
   const buns = ingredients.filter((item) => item.type === 'bun');
   const mains = ingredients.filter((item) => item.type === 'main');
   const sauces = ingredients.filter((item) => item.type === 'sauce');
