@@ -15,9 +15,21 @@ export const BurgerConstructor: FC = () => {
   const orderRequest = useSelector(selectorOrderRequest);
   const orderModalData = useSelector(selectorOrderModalData);
 
-  const onOrderClick = () => {
+  /* const onOrderClick = () => {
     if (!constructorItems.bun || orderRequest) return;
-  };
+
+    const idIngredients = constructorItems.ingredients.map((item) => item._id);
+    dispatch(
+      sendOrder([
+        constructorItems.bun._id,
+        ...idIngredients,
+        constructorItems.bun._id
+      ])
+    );
+  }; */
+
+  const onOrderClick = () => {};
+
   const closeOrderModal = () => {};
 
   const price = useMemo(

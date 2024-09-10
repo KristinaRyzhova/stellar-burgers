@@ -2,19 +2,19 @@ import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import { getIngredientsApi } from '../../../utils/burger-api';
 import { TIngredient } from '@utils-types';
 
-export interface ingredientsState {
+export interface IIngredientsState {
   ingredients: TIngredient[];
   isLoading: boolean;
   error: string | null;
 }
 
-const initialState: ingredientsState = {
+const initialState: IIngredientsState = {
   ingredients: [],
   isLoading: false,
   error: null
 };
 
-export const fetchIngredients = createAsyncThunk(
+export const fetchIngredients = createAsyncThunk<TIngredient[]>(
   'ingredients/getAllIngredients',
   async () => {
     const data = await getIngredientsApi();
@@ -27,7 +27,7 @@ export const ingredientsSlice = createSlice({
   initialState,
   reducers: {},
   selectors: {
-    selectorIngredients: (state: ingredientsState) => state.ingredients,
+    selectorIngredients: (state: IIngredientsState) => state.ingredients,
     selectorIsLoading: (state) => state.isLoading
   },
   extraReducers: (builder) => {
