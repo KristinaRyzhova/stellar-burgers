@@ -14,7 +14,7 @@ const initialState: IIngredientsState = {
   error: null
 };
 
-export const fetchIngredients = createAsyncThunk<TIngredient[]>(
+export const fetchIngredients = createAsyncThunk(
   'ingredients/getAllIngredients',
   async () => {
     const data = await getIngredientsApi();
