@@ -1,4 +1,5 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { getOrderByNumberApi, getOrdersApi, orderBurgerApi } from '@api';
+import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { TConstructorIngredient, TIngredient, TOrder } from '@utils-types';
 import { v4 as uuidv4 } from 'uuid';
 
@@ -9,6 +10,9 @@ export interface IBurgerConstructor {
   };
   orderRequest: boolean;
   orderModalData: TOrder | null;
+  orders: TOrder[] | [];
+  isLoading: boolean;
+  error: string | null;
 }
 
 export const initialState: IBurgerConstructor = {
@@ -17,11 +21,35 @@ export const initialState: IBurgerConstructor = {
     ingredients: []
   },
   orderRequest: false,
-  orderModalData: null
+  orderModalData: null,
+  orders: [],
+  isLoading: false,
+  error: null
 };
 
+export const fetchCreateOrder = createAsyncThunk(
+  'order/сreateOrder',
+  async (data: string[]) => {
+    const result = await orderBurgerApi(data);
+    return result;
+  }
+);
+
+export const fetchOrderByNumber = createAsyncThunk(
+  'order/getOrderByNumber',
+  (data: number) => getOrderByNumberApi(data)
+);
+
+export const fetchUserOrders = createAsyncThunk(
+  'orders/getUserOrders',
+  async () => {
+    const data = await getOrdersApi();
+    return data;
+  }
+);
+
 export const burgerConstructorSlice = createSlice({
-  name: 'burgerConstructor',
+  name: 'order',
   initialState,
   reducers: {
     addIngredient: {
@@ -69,15 +97,56 @@ export const burgerConstructorSlice = createSlice({
         ];
         state.constructorItems.ingredients = newIngredients;
       }
-    }
+    },
+    resetConstructor: () => initialState
   },
   selectors: {
     selectorConstructorItems: (state) => state.constructorItems,
     selectorOrderRequest: (state) => state.orderRequest,
     selectorOrderModalData: (state) => state.orderModalData
+  },
+  extraReducers: (builder) => {
+    builder
+      .addCase(fetchCreateOrder.pending, (state) => {
+        state.orderRequest = true;
+      })
+      .addCase(fetchCreateOrder.fulfilled, (state, action) => {
+        state.orderRequest = false;
+        state.orderModalData = action.payload.order;
+      })
+      .addCase(fetchCreateOrder.rejected, (state) => {
+        state.orderRequest = false;
+      })
+      .addCase(fetchOrderByNumber.pending, (state) => {
+        state.orderRequest = true;
+        state.isLoading = true;
+        state.error = null;
+      })
+      .addCase(fetchOrderByNumber.fulfilled, (state, action) => {
+        state.orderRequest = false;
+        state.orderModalData = action.payload.orders[0];
+        state.isLoading = false;
+        state.error = null;
+      })
+      .addCase(fetchOrderByNumber.rejected, (state, action) => {
+        state.orderRequest = false;
+        state.isLoading = false;
+        state.error = action.error.message || null;
+      })
+      .addCase(fetchUserOrders.pending, (state) => {
+        state.isLoading = true;
+        state.error = null;
+      })
+      .addCase(fetchUserOrders.fulfilled, (state, action) => {
+        state.orders = action.payload;
+        state.isLoading = false;
+        state.error = null;
+      })
+      .addCase(fetchUserOrders.rejected, (state, action) => {
+        state.isLoading = false;
+        state.error = action.error.message || null;
+      });
   }
-
-  //orderBurgerApi
 });
 
 export default burgerConstructorSlice.reducer;
@@ -88,5 +157,10 @@ export const {
   selectorOrderModalData
 } = burgerConstructorSlice.selectors;
 
-export const { addIngredient, removeIngredient, upIngredient, downIngredient } =
-  burgerConstructorSlice.actions;
+export const {
+  addIngredient,
+  removeIngredient,
+  upIngredient,
+  downIngredient,
+  resetConstructor
+} = burgerConstructorSlice.actions;

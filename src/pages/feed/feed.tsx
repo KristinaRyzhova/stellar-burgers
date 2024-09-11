@@ -1,12 +1,11 @@
 import { Preloader } from '@ui';
 import { FeedUI } from '@ui-pages';
 import { FC, useEffect } from 'react';
-import { useSelector } from 'react-redux';
 import {
   fetchFeeds,
   selectorOrders
 } from '../../services/slices/feedsSlice/feedsSlice';
-import { useDispatch } from '../../services/store';
+import { useDispatch, useSelector } from '../../services/store';
 import { TOrder } from '@utils-types';
 
 export const Feed: FC = () => {
