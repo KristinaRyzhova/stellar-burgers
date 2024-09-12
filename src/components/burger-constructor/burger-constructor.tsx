@@ -27,6 +27,7 @@ export const BurgerConstructor: FC = () => {
       constructorItems.bun._id
     ];
     dispatch(fetchCreateOrder(newOrder));
+    console.log(newOrder);
   };
 
   const closeOrderModal = () => {
