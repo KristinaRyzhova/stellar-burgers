@@ -1,5 +1,9 @@
 import { TOrder } from '@utils-types';
-import { getFeedsApi, getOrderByNumberApi } from '../../../utils/burger-api';
+import {
+  getFeedsApi,
+  getOrderByNumberApi,
+  getOrdersApi
+} from '../../../utils/burger-api';
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 
 interface IFeedsState {
@@ -28,6 +32,14 @@ export const fetchOrderByNumber = createAsyncThunk(
   async (number: number) => {
     const data = await getOrderByNumberApi(number);
     return data.orders;
+  }
+);
+
+export const fetchGetUserOrders = createAsyncThunk(
+  'order/fetchGetUserOrders',
+  async () => {
+    const res = await getOrdersApi();
+    return res;
   }
 );
 
@@ -64,6 +76,19 @@ export const feedsSlice = createSlice({
         state.isLoading = false;
         state.orders = action.payload;
         state.error = null;
+      })
+      .addCase(fetchGetUserOrders.pending, (state) => {
+        state.isLoading = true;
+        state.error = null;
+      })
+      .addCase(fetchGetUserOrders.rejected, (state, action) => {
+        state.isLoading = false;
+        state.error = null;
+      })
+      .addCase(fetchGetUserOrders.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.error = null;
+        state.orders = action.payload;
       });
   },
   selectors: {

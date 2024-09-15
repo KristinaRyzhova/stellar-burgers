@@ -6,7 +6,6 @@ import { useSelector } from 'react-redux';
 import { selectorIngredients } from '../../services/slices/ingredientsSlice/ingredientsSlice';
 
 export const IngredientDetails: FC = () => {
-  /** TODO: взять переменную из стора */
   const ingredients = useSelector(selectorIngredients);
   const { id } = useParams();
   const ingredientData = ingredients.find((item) => item._id === id);

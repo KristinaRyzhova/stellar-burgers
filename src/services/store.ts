@@ -9,11 +9,13 @@ import {
 import { ingredientsSlice } from './slices/ingredientsSlice/ingredientsSlice';
 import { burgerConstructorSlice } from './slices/burgerConstructorSlice/burgerConstructorSlice';
 import { feedsSlice } from './slices/feedsSlice/feedsSlice';
+import { userSlice } from './slices/userSlice/userSlice';
 
 const rootReducer = combineSlices(
   ingredientsSlice,
   burgerConstructorSlice,
-  feedsSlice
+  feedsSlice,
+  userSlice
 );
 
 const store = configureStore({
