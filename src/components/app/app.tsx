@@ -1,4 +1,10 @@
-import { Route, Routes, useLocation, useNavigate } from 'react-router-dom';
+import {
+  Route,
+  Routes,
+  useLocation,
+  useNavigate,
+  useParams
+} from 'react-router-dom';
 import {
   ConstructorPage,
   Feed,
@@ -32,6 +38,9 @@ export const App = () => {
   useEffect(() => {
     dispatch(fetchIngredients());
   }, [dispatch]);
+
+  const match = location.pathname.match(/\d+/);
+  const orderNumbers = match ? parseInt(match[0], 10) : null;
 
   return (
     <>
@@ -82,7 +91,7 @@ export const App = () => {
             <Route
               path='/feed/:number'
               element={
-                <Modal title={``} onClose={closeModal}>
+                <Modal title={`#${orderNumbers}`} onClose={closeModal}>
                   <OrderInfo />
                 </Modal>
               }
@@ -90,7 +99,7 @@ export const App = () => {
             <Route
               path='/ingredients/:id'
               element={
-                <Modal title={``} onClose={closeModal}>
+                <Modal title={`Детали ингридиента`} onClose={closeModal}>
                   <IngredientDetails />
                 </Modal>
               }
@@ -98,7 +107,7 @@ export const App = () => {
             <Route
               path='/profile/orders/:number'
               element={
-                <Modal title={``} onClose={closeModal}>
+                <Modal title={`#${orderNumbers}`} onClose={closeModal}>
                   <ProtectedRoute component={<OrderInfo />} />
                 </Modal>
               }

@@ -22,25 +22,16 @@ export const initialState: IFeedsState = {
   error: null
 };
 
-export const fetchFeeds = createAsyncThunk('feed/fetchFeeds', async () => {
-  const data = await getFeedsApi();
-  return data;
-});
+export const fetchFeeds = createAsyncThunk('feed/fetchFeeds', getFeedsApi);
 
 export const fetchOrderByNumber = createAsyncThunk(
   'order/fetchOrderByNumber',
-  async (number: number) => {
-    const data = await getOrderByNumberApi(number);
-    return data.orders;
-  }
+  (number: number) => getOrderByNumberApi(number).then((data) => data.orders)
 );
 
 export const fetchGetUserOrders = createAsyncThunk(
-  'order/fetchGetUserOrders',
-  async () => {
-    const res = await getOrdersApi();
-    return res;
-  }
+  'user/fetchGetUserOrders',
+  getOrdersApi
 );
 
 export const feedsSlice = createSlice({

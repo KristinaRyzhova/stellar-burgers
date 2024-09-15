@@ -7,12 +7,7 @@ import {
   TRegisterData,
   updateUserApi
 } from '@api';
-import {
-  createAction,
-  createAsyncThunk,
-  createSlice,
-  PayloadAction
-} from '@reduxjs/toolkit';
+import { createAction, createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import { TUser } from '@utils-types';
 import { deleteCookie, setCookie } from '../../../utils/cookie';
 
@@ -32,25 +27,9 @@ const initialState: userState = {
 
 export const setUser = createAction<TUser | null, 'SET_USER'>('SET_USER');
 
-export const checkUserAuth = createAsyncThunk(
-  'user/checkUserAuth',
-  async (_, { dispatch }) => {
-    if (localStorage.getItem('accessToken')) {
-      getUserApi()
-        .then((res) => dispatch(setUser(res.user)))
-        .finally(() => dispatch(setIsAuthChecked(true)));
-    } else {
-      dispatch(setIsAuthChecked(true));
-    }
-  }
-);
-
 export const fetchRegisterUser = createAsyncThunk(
   'users/fetchRegisterUser',
-  async (data: TRegisterData) => {
-    const res = await registerUserApi(data);
-    return res;
-  }
+  (data: TRegisterData) => registerUserApi(data)
 );
 
 export const fetchLoginUser = createAsyncThunk(
@@ -63,17 +42,11 @@ export const fetchLoginUser = createAsyncThunk(
   }
 );
 
-export const fetchGetUser = createAsyncThunk('user/fetchGetUser', async () => {
-  const res = await getUserApi();
-  return res;
-});
+export const fetchGetUser = createAsyncThunk('user/fetchGetUser', getUserApi);
 
 export const fetchUpdateUser = createAsyncThunk(
   'users/fetchUpdateUser',
-  async (user: TRegisterData) => {
-    const res = await updateUserApi(user);
-    return res;
-  }
+  (user: TRegisterData) => updateUserApi(user)
 );
 
 export const fetchLogoutUser = createAsyncThunk(
@@ -89,11 +62,7 @@ export const fetchLogoutUser = createAsyncThunk(
 export const userSlice = createSlice({
   name: 'user',
   initialState,
-  reducers: {
-    setIsAuthChecked: (state, action: PayloadAction<boolean>) => {
-      state.isAuthChecked = action.payload;
-    }
-  },
+  reducers: {},
   selectors: {
     getIsAuthChecked: (state) => state.isAuthChecked,
     getUser: (state) => state.user
@@ -181,5 +150,4 @@ export const userSlice = createSlice({
   }
 });
 
-export const { setIsAuthChecked } = userSlice.actions;
 export const { getIsAuthChecked, getUser } = userSlice.selectors;

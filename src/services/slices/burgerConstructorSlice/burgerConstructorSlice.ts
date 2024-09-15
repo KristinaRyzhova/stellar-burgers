@@ -28,11 +28,8 @@ export const initialState: IBurgerConstructor = {
 };
 
 export const fetchCreateOrder = createAsyncThunk(
-  'order/сreateOrder',
-  async (data: string[]) => {
-    const result = await orderBurgerApi(data);
-    return result;
-  }
+  'order/fetchCreateOrder',
+  (data: string[]) => orderBurgerApi(data)
 );
 
 export const burgerConstructorSlice = createSlice({
