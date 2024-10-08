@@ -20,6 +20,7 @@ const config: Config = {
       }
     ]
   }
+
   // All imported modules in your tests should be mocked automatically
   // automock: false,
 
@@ -32,11 +33,12 @@ const config: Config = {
   // Automatically clear mock calls, instances, contexts and results before every test
   // clearMocks: false,
 
+  // Indicates whether the coverage information should be collected while executing the test
+
   // An array of glob patterns indicating a set of files for which coverage information should be collected
   // collectCoverageFrom: undefined,
 
   // The directory where Jest should output its coverage files
-  // coverageDirectory: undefined,
 
   // An array of regexp pattern strings used to skip coverage collection
   // coveragePathIgnorePatterns: [
