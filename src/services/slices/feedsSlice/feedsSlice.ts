@@ -74,7 +74,7 @@ export const feedsSlice = createSlice({
       })
       .addCase(fetchGetUserOrders.rejected, (state, action) => {
         state.isLoading = false;
-        state.error = null;
+        state.error = action.error.message || null;
       })
       .addCase(fetchGetUserOrders.fulfilled, (state, action) => {
         state.isLoading = false;
