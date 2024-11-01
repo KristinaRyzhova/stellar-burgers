@@ -1,0 +1,9 @@
+{
+    "success": true,
+    "accessToken": "accessTokenTest",
+    "refreshToken": "refreshTokenTest",
+    "user": {
+        "email": "test@rambler.ru",
+        "name": "testName"
+    }
+}

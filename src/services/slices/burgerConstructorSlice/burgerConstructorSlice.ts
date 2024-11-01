@@ -13,6 +13,7 @@ export interface IBurgerConstructor {
   orders: TOrder[] | [];
   isLoading: boolean;
   error: string | null;
+  isModalOpen: boolean;
 }
 
 export const initialState: IBurgerConstructor = {
@@ -24,7 +25,8 @@ export const initialState: IBurgerConstructor = {
   orderModalData: null,
   orders: [],
   isLoading: false,
-  error: null
+  error: null,
+  isModalOpen: false
 };
 
 export const fetchCreateOrder = createAsyncThunk(
@@ -82,6 +84,12 @@ export const burgerConstructorSlice = createSlice({
         state.constructorItems.ingredients = newIngredients;
       }
     },
+
+    closeModal: (state) => {
+      state.isModalOpen = false;
+      state.orderModalData = null;
+    },
+
     resetConstructor: () => initialState
   },
   selectors: {
@@ -117,5 +125,6 @@ export const {
   removeIngredient,
   upIngredient,
   downIngredient,
+  closeModal,
   resetConstructor
 } = burgerConstructorSlice.actions;

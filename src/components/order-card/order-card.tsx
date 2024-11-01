@@ -34,6 +34,8 @@ export const OrderCard: FC<OrderCardProps> = memo(({ order }) => {
         : 0;
 
     const date = new Date(order.createdAt);
+    console.log(date);
+
     return {
       ...order,
       ingredientsInfo,

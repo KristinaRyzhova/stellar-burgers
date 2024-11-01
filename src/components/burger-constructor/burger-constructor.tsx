@@ -2,6 +2,7 @@ import { FC, useMemo } from 'react';
 import { TConstructorIngredient } from '@utils-types';
 import { BurgerConstructorUI } from '@ui';
 import {
+  closeModal,
   fetchCreateOrder,
   resetConstructor,
   selectorConstructorItems,
@@ -31,12 +32,12 @@ export const BurgerConstructor: FC = () => {
       ...constructorItems.ingredients.map((item) => item._id),
       constructorItems.bun._id
     ];
+    dispatch(resetConstructor());
     dispatch(fetchCreateOrder(newOrder));
   };
 
   const closeOrderModal = () => {
-    dispatch(resetConstructor());
-    navigate('/');
+    dispatch(closeModal());
   };
 
   const price = useMemo(
