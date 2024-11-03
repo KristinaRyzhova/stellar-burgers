@@ -24,6 +24,7 @@ import { useEffect } from 'react';
 import { fetchIngredients } from '../../services/slices/ingredientsSlice/ingredientsSlice';
 import { useDispatch } from '../../services/store';
 import { ProtectedRoute } from '../protected-route/protected-route';
+import { checkUserAuth } from '../../services/slices/userSlice/userSlice';
 
 export const App = () => {
   const location = useLocation();
@@ -37,6 +38,7 @@ export const App = () => {
   const dispatch = useDispatch();
   useEffect(() => {
     dispatch(fetchIngredients());
+    dispatch(checkUserAuth());
   }, [dispatch]);
 
   const match = location.pathname.match(/\d+/);
@@ -48,7 +50,6 @@ export const App = () => {
         <AppHeader />
         <Routes location={backgroundLocation || location}>
           <Route path='/' element={<ConstructorPage />} />
-          <Route path='/feed' element={<Feed />} />
           <Route path='/feed' element={<Feed />} />
           <Route
             path='/login'
@@ -78,13 +79,16 @@ export const App = () => {
             path='/profile/orders'
             element={<ProtectedRoute component={<ProfileOrders />} />}
           />
+          <Route
+            path='/profile/orders'
+            element={<ProtectedRoute component={<ProfileOrders />} />}
+          />
           <Route path='/feed/:number' element={<OrderInfo />} />
           <Route path='/ingredients/:id' element={<IngredientDetails />} />
           <Route
             path='/profile/orders/:number'
             element={<ProtectedRoute component={<OrderInfo />} />}
           />
-          <Route path='*' element={<NotFound404 />} />
         </Routes>
         {backgroundLocation && (
           <Routes>

@@ -7,9 +7,14 @@ import {
   TRegisterData,
   updateUserApi
 } from '@api';
-import { createAction, createAsyncThunk, createSlice } from '@reduxjs/toolkit';
+import {
+  createAction,
+  createAsyncThunk,
+  createSlice,
+  PayloadAction
+} from '@reduxjs/toolkit';
 import { TUser } from '@utils-types';
-import { deleteCookie, setCookie } from '../../../utils/cookie';
+import { getCookie, deleteCookie, setCookie } from '../../../utils/cookie';
 
 export interface userState {
   user: TUser | null;
@@ -26,6 +31,19 @@ export const initialState: userState = {
 };
 
 export const setUser = createAction<TUser | null, 'SET_USER'>('SET_USER');
+
+export const checkUserAuth = createAsyncThunk(
+  'user/checkAuth',
+  async (_, { dispatch }) => {
+    if (getCookie('accessToken')) {
+      getUserApi()
+        .then((res) => dispatch(setUser(res.user)))
+        .finally(() => dispatch(authChecked(true)));
+    } else {
+      dispatch(authChecked(true));
+    }
+  }
+);
 
 export const fetchRegisterUser = createAsyncThunk(
   'users/fetchRegisterUser',
@@ -62,7 +80,11 @@ export const fetchLogoutUser = createAsyncThunk(
 export const userSlice = createSlice({
   name: 'user',
   initialState,
-  reducers: {},
+  reducers: {
+    authChecked: (state, action: PayloadAction<boolean>) => {
+      state.isAuthChecked = action.payload;
+    }
+  },
   selectors: {
     getIsAuthChecked: (state) => state.isAuthChecked,
     getUser: (state) => state.user
@@ -150,4 +172,5 @@ export const userSlice = createSlice({
   }
 });
 
+export const { authChecked } = userSlice.actions;
 export const { getIsAuthChecked, getUser } = userSlice.selectors;
