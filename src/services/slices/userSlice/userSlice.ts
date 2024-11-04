@@ -46,12 +46,12 @@ export const checkUserAuth = createAsyncThunk(
 );
 
 export const fetchRegisterUser = createAsyncThunk(
-  'users/fetchRegisterUser',
+  'user/fetchRegisterUser',
   (data: TRegisterData) => registerUserApi(data)
 );
 
 export const fetchLoginUser = createAsyncThunk(
-  'users/fetchLoginUser',
+  'user/fetchLoginUser',
   async (data: TLoginData) => {
     const res = await loginUserApi(data);
     setCookie('accessToken', res.accessToken);
@@ -63,12 +63,12 @@ export const fetchLoginUser = createAsyncThunk(
 export const fetchGetUser = createAsyncThunk('user/fetchGetUser', getUserApi);
 
 export const fetchUpdateUser = createAsyncThunk(
-  'users/fetchUpdateUser',
+  'user/fetchUpdateUser',
   (user: TRegisterData) => updateUserApi(user)
 );
 
 export const fetchLogoutUser = createAsyncThunk(
-  'users/fetchLogoutUser',
+  'user/fetchLogoutUser',
   async () => {
     const res = await logoutApi();
     deleteCookie('accessToken');

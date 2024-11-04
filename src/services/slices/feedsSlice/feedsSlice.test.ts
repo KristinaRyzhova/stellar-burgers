@@ -1,5 +1,10 @@
 import { TOrder } from '@utils-types';
-import { feedsSlice, fetchFeeds, initialState } from './feedsSlice';
+import {
+  feedsSlice,
+  fetchFeeds,
+  fetchGetUserOrders,
+  initialState
+} from './feedsSlice';
 
 const testOrder: TOrder = {
   ingredients: [
@@ -51,6 +56,31 @@ describe('Тесты редюсера feedsSlice', () => {
   it('должен установить ошибку и isLoading в false на fetchFeeds.rejected', () => {
     const error = { message: 'Ошибка сети' };
     const action = { type: fetchFeeds.rejected.type, error };
+    const state = feedsSlice.reducer(initialState, action);
+    expect(state.isLoading).toBe(false);
+    expect(state.error).toBe(error.message);
+  });
+
+  it('должен установить isLoading в true на fetchGetUserOrders.pending', () => {
+    const action = { type: fetchGetUserOrders.pending.type };
+    const state = feedsSlice.reducer(initialState, action);
+    expect(state.isLoading).toBe(true);
+    expect(state.error).toBe(null);
+  });
+
+  it('должен обновить заказы и установить isLoading в false на fetchGetUserOrders.fulfilled', () => {
+    const action = {
+      type: fetchGetUserOrders.fulfilled.type,
+      payload: [testOrder]
+    };
+    const state = feedsSlice.reducer(initialState, action);
+    expect(state.isLoading).toBe(false);
+    expect(state.orders).toEqual([testOrder]);
+  });
+
+  it('должен установить ошибку и isLoading в false на fetchGetUserOrders.rejected', () => {
+    const error = { message: 'Ошибка сети' };
+    const action = { type: fetchGetUserOrders.rejected.type, error };
     const state = feedsSlice.reducer(initialState, action);
     expect(state.isLoading).toBe(false);
     expect(state.error).toBe(error.message);

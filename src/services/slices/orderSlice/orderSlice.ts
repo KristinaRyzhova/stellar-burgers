@@ -17,12 +17,12 @@ export const initialState: OrdersState = {
 };
 
 export const fetchOrderByNumber = createAsyncThunk(
-  'getOrder',
+  'orderByNum/getOrderByNumberApi',
   getOrderByNumberApi
 );
 
 export const orderSlice = createSlice({
-  name: 'orders',
+  name: 'orderByNum',
   initialState,
   reducers: {},
   selectors: {

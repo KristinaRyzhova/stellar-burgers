@@ -1,9 +1,5 @@
 import { TOrder } from '@utils-types';
-import {
-  getFeedsApi,
-  getOrderByNumberApi,
-  getOrdersApi
-} from '../../../utils/burger-api';
+import { getFeedsApi, getOrdersApi } from '../../../utils/burger-api';
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 
 interface IFeedsState {
@@ -25,7 +21,7 @@ export const initialState: IFeedsState = {
 export const fetchFeeds = createAsyncThunk('feed/fetchFeeds', getFeedsApi);
 
 export const fetchGetUserOrders = createAsyncThunk(
-  'user/fetchGetUserOrders',
+  'feed/fetchGetUserOrders',
   getOrdersApi
 );
 

@@ -1,22 +1,21 @@
 import { rootReducer } from '../store';
-import { initialState as feedInitialState } from '../slices/feedsSlice/feedsSlice';
 import { initialState as ingredientsInitialState } from '../slices/ingredientsSlice/ingredientsSlice';
+import { initialState as burgerConstructorInitialState } from '../slices/burgerConstructorSlice/burgerConstructorSlice';
+import { initialState as feedsInitialState } from '../slices/feedsSlice/feedsSlice';
 import { initialState as userInitialState } from '../slices/userSlice/userSlice';
-import { initialState as orderInitialState } from '../slices/burgerConstructorSlice/burgerConstructorSlice';
+import { initialState as orderInitialState } from '../slices/orderSlice/orderSlice';
 
 describe('rootReducer', () => {
-  it('тест проверяющий правильную настройку и работу rootReducer: вызов rootReducer с undefined состоянием и экшеном, который не обрабатывается ни одним редьюсером, возвращает корректное начальное состояние хранилища', () => {
+  it('должен возвращать корректное начальное состояние для неопознанного действия', () => {
     const action = { type: 'UNKNOWN_ACTION' };
-
-    const initialState = {
-      feed: feedInitialState,
-      ingredients: ingredientsInitialState,
-      user: userInitialState,
-      order: orderInitialState
-    };
-
     const state = rootReducer(undefined, action);
 
-    expect(state).toEqual(initialState);
+    expect(state).toEqual({
+      ingredients: ingredientsInitialState,
+      order: burgerConstructorInitialState,
+      feed: feedsInitialState,
+      user: userInitialState,
+      orderByNum: orderInitialState
+    });
   });
 });
