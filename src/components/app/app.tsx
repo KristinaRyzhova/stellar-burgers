@@ -1,10 +1,4 @@
-import {
-  Route,
-  Routes,
-  useLocation,
-  useNavigate,
-  useParams
-} from 'react-router-dom';
+import { Route, Routes, useLocation, useNavigate } from 'react-router-dom';
 import {
   ConstructorPage,
   Feed,
@@ -25,6 +19,7 @@ import { fetchIngredients } from '../../services/slices/ingredientsSlice/ingredi
 import { useDispatch } from '../../services/store';
 import { ProtectedRoute } from '../protected-route/protected-route';
 import { checkUserAuth } from '../../services/slices/userSlice/userSlice';
+import { TitleWrapper } from '../title-wrapper';
 
 export const App = () => {
   const location = useLocation();
@@ -83,12 +78,35 @@ export const App = () => {
             path='/profile/orders'
             element={<ProtectedRoute component={<ProfileOrders />} />}
           />
-          <Route path='/feed/:number' element={<OrderInfo />} />
-          <Route path='/ingredients/:id' element={<IngredientDetails />} />
+          <Route
+            path='/feed/:number'
+            element={
+              <TitleWrapper>
+                <OrderInfo />
+              </TitleWrapper>
+            }
+          />
+          <Route
+            path='/ingredients/:id'
+            element={
+              <TitleWrapper>
+                <IngredientDetails />
+              </TitleWrapper>
+            }
+          />
           <Route
             path='/profile/orders/:number'
-            element={<ProtectedRoute component={<OrderInfo />} />}
+            element={
+              <ProtectedRoute
+                component={
+                  <TitleWrapper>
+                    <OrderInfo />
+                  </TitleWrapper>
+                }
+              />
+            }
           />
+          <Route path='*' element={<NotFound404 />} />
         </Routes>
         {backgroundLocation && (
           <Routes>
