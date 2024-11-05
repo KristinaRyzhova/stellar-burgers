@@ -1,47 +1,59 @@
-describe('Тестирование создания заказа  stellar-burger', () => {
-  const testUrl = 'http://localhost:4000';
+const orderUrl = 'http://localhost:4000/';
 
-  beforeEach(function () {
-    cy.setCookie('accessToken', '12345');
+describe('доступность приложения', function () {
+  it('сервис должен быть доступен по адресу localhost:4000', function () {
+    cy.visit(orderUrl);
+  });
+});
+
+describe('E2E Stellar-burger order test', () => {
+  beforeEach(() => {
+    window.localStorage.setItem(
+      'refreshToken',
+      JSON.stringify('test-refreshToken')
+    );
+    cy.setCookie('accessToken', 'test-accessToken');
+
     cy.intercept('GET', 'api/ingredients', { fixture: 'ingredients.json' });
     cy.intercept('GET', 'api/auth/user', { fixture: 'user.json' });
     cy.intercept('POST', 'api/orders', { fixture: 'order.json' }).as(
       'postOrder'
     );
-    cy.intercept('POST', 'api/auth/login', { fixture: 'login.json' });
-    cy.visit(testUrl);
+    cy.visit(orderUrl);
   });
 
-  afterEach(function () {
+  afterEach(() => {
     cy.clearCookie('accessToken');
     localStorage.removeItem('refreshToken');
   });
 
-  it('Проверяем, что ингредиенты отсутствуют', () => {
-    cy.get('[data-cy=empty-bun-top]').contains('Выберите булки');
-    //cy.get('[data-cy=empty-main-ingredients]').contains('Выберите начинку');
-    //cy.get('[data-cy=empty-bun-bottom]').contains('Выберите булки');
-  });
+  it('Добавление ингредиентов и создание заказа', function () {
+    // проверяем, что ингредиенты отсутствуют
+    cy.get('[data-cy=burger-constructor-bun-top]').should('not.exist');
+    cy.get('[data-cy=burger-constructor-main-ingredients] li').should(
+      'have.length',
+      0
+    );
+    cy.get('[data-cy=burger-constructor-bun-bottom]').should('not.exist');
 
-  it('Добавляем ингредиенты в заказ', () => {
+    // добавляем ингредиенты
     cy.contains('Краторная булка N-200i').parents('li').find('button').click();
-    /* cy.contains('Филе Люминесцентного тетраодонтимформа')
+    cy.contains('Филе Люминесцентного тетраодонтимформа')
       .parents('li')
       .find('button')
       .click();
     cy.contains('Биокотлета из марсианской Магнолии')
       .parents('li')
       .find('button')
-      .click(); */
-  });
+      .click();
 
-  it('проверяем, что ингредиенты добавились', () => {
+    // проверяем, что ингредиенты добавились
     cy.get('[data-cy=burger-constructor-bun-top]')
       .find('span')
       .contains('Краторная булка N-200i')
       .should('exist')
       .and('be.visible');
-    /* cy.get('[data-cy=burger-constructor-main-ingredients]')
+    cy.get('[data-cy=burger-constructor-main-ingredients]')
       .find('li')
       .contains('Филе Люминесцентного тетраодонтимформа')
       .should('exist')
@@ -55,15 +67,31 @@ describe('Тестирование создания заказа  stellar-burger
       .find('span')
       .contains('Краторная булка N-200i')
       .should('exist')
-      .and('be.visible'); */
+      .and('be.visible');
+
+    // нажимаем кнопку оформления заказа
+    cy.get('[data-cy=burger-constructor-submit]')
+      .contains('Оформить заказ')
+      .should('exist')
+      .click();
+
+    //Проверка открытия модального окна и номера заказа после успешного создания заказа
+    cy.get('[data-cy=order-number]').contains('58734').should('exist');
+
+    //Тест закрытия модального окна заказа по крестику
+    cy.get('#modals').find('button').click();
+    cy.get('#modals').should('be.empty');
+
+    //Тест закрытия модального окна заказа по оверлей
+    cy.get(`[data-cy='modal-overlay']`).click({ force: true });
+    cy.get('#modals').should('be.empty');
+
+    //Проверка очищения конструктора от ингредиентов
+    cy.get('[data-cy=burger-constructor-bun-top]').should('not.exist');
+    cy.get('[data-cy=burger-constructor-main-ingredients] li').should(
+      'have.length',
+      0
+    );
+    cy.get('[data-cy=burger-constructor-bun-bottom]').should('not.exist');
   });
-
-  /* it('Нажимаем кнопку "Оформить заказ" и проверяем, что ингредиенты добавились', () => {
-    cy.get('button').contains('Оформить заказ').click();
-  }); */
-
-  /* it('Проверяем, что пользователь овторизовался', () => {
-    cy.wait('@getUser'); // Ждем ответа на запрос пользователя
-    cy.get('[data-cy="userName"]').contains('Кристина').should('exist');
-  }); */
 });
