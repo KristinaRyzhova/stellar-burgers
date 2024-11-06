@@ -30,8 +30,6 @@ export const initialState: userState = {
   error: null
 };
 
-export const setUser = createAction<TUser | null, 'SET_USER'>('SET_USER');
-
 export const checkUserAuth = createAsyncThunk(
   'user/checkAuth',
   async (_, { dispatch }) => {
@@ -83,6 +81,9 @@ export const userSlice = createSlice({
   reducers: {
     authChecked: (state, action: PayloadAction<boolean>) => {
       state.isAuthChecked = action.payload;
+    },
+    setUser: (state, action: PayloadAction<TUser | null>) => {
+      state.user = action.payload;
     }
   },
   selectors: {
@@ -172,5 +173,5 @@ export const userSlice = createSlice({
   }
 });
 
-export const { authChecked } = userSlice.actions;
+export const { authChecked, setUser } = userSlice.actions;
 export const { getIsAuthChecked, getUser } = userSlice.selectors;

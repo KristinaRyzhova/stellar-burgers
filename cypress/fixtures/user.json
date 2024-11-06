@@ -1,7 +1,7 @@
 {
-    "success": true,
-    "user": {
-      "email": "kirillki@rambler.ru",
-      "name": "Кристина"
-    }
+  "success": true,
+  "user": {
+    "email": "email@email.ru",
+    "name": "userName"
   }
+}

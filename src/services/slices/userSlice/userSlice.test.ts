@@ -6,7 +6,9 @@ import {
   fetchGetUser,
   fetchUpdateUser,
   fetchLogoutUser,
-  initialState
+  initialState,
+  setUser,
+  authChecked
 } from './userSlice';
 
 const testUser: TUser = {
@@ -18,6 +20,16 @@ describe('Тесты редюсера userSlice', () => {
   it('должен возвращать начальное состояние', () => {
     const state = userSlice.reducer(undefined, { type: '' });
     expect(state).toEqual(initialState);
+  });
+
+  it('Тест для редьюсера authChecked', () => {
+    const state = userSlice.reducer(initialState, authChecked(true));
+    expect(state.isAuthChecked).toEqual(true);
+  });
+
+  it('Тест для редьюсера setUser', () => {
+    const state = userSlice.reducer(initialState, setUser(testUser));
+    expect(state.user).toEqual(testUser);
   });
 
   it('должен установить isLoading в true на fetchRegisterUser.pending', () => {

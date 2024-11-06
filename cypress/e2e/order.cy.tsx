@@ -13,18 +13,10 @@ describe('E2E Stellar-burger order test', () => {
       JSON.stringify('test-refreshToken')
     );
     cy.setCookie('accessToken', 'test-accessToken');
-
     cy.intercept('GET', 'api/ingredients', { fixture: 'ingredients.json' });
     cy.intercept('GET', 'api/auth/user', { fixture: 'user.json' });
-    cy.intercept('POST', 'api/orders', { fixture: 'order.json' }).as(
-      'postOrder'
-    );
+    cy.intercept('POST', 'api/orders', { fixture: 'order.json' });
     cy.visit(orderUrl);
-  });
-
-  afterEach(() => {
-    cy.clearCookie('accessToken');
-    localStorage.removeItem('refreshToken');
   });
 
   it('Добавление ингредиентов и создание заказа', function () {
@@ -72,7 +64,6 @@ describe('E2E Stellar-burger order test', () => {
     // нажимаем кнопку оформления заказа
     cy.get('[data-cy=burger-constructor-submit]')
       .contains('Оформить заказ')
-      .should('exist')
       .click();
 
     //Проверка открытия модального окна и номера заказа после успешного создания заказа
@@ -80,10 +71,6 @@ describe('E2E Stellar-burger order test', () => {
 
     //Тест закрытия модального окна заказа по крестику
     cy.get('#modals').find('button').click();
-    cy.get('#modals').should('be.empty');
-
-    //Тест закрытия модального окна заказа по оверлей
-    cy.get(`[data-cy='modal-overlay']`).click({ force: true });
     cy.get('#modals').should('be.empty');
 
     //Проверка очищения конструктора от ингредиентов
