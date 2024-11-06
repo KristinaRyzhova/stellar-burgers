@@ -1,9 +1,5 @@
 import { TOrder } from '@utils-types';
-import {
-  getFeedsApi,
-  getOrderByNumberApi,
-  getOrdersApi
-} from '../../../utils/burger-api';
+import { getFeedsApi, getOrdersApi } from '../../../utils/burger-api';
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 
 interface IFeedsState {
@@ -24,13 +20,8 @@ export const initialState: IFeedsState = {
 
 export const fetchFeeds = createAsyncThunk('feed/fetchFeeds', getFeedsApi);
 
-export const fetchOrderByNumber = createAsyncThunk(
-  'order/fetchOrderByNumber',
-  (number: number) => getOrderByNumberApi(number).then((data) => data.orders)
-);
-
 export const fetchGetUserOrders = createAsyncThunk(
-  'user/fetchGetUserOrders',
+  'feed/fetchGetUserOrders',
   getOrdersApi
 );
 
@@ -55,26 +46,13 @@ export const feedsSlice = createSlice({
         state.totalToday = action.payload.totalToday;
         state.error = null;
       })
-      .addCase(fetchOrderByNumber.pending, (state) => {
-        state.isLoading = true;
-        state.error = null;
-      })
-      .addCase(fetchOrderByNumber.rejected, (state, action) => {
-        state.isLoading = false;
-        state.error = action.error.message || null;
-      })
-      .addCase(fetchOrderByNumber.fulfilled, (state, action) => {
-        state.isLoading = false;
-        state.orders = action.payload;
-        state.error = null;
-      })
       .addCase(fetchGetUserOrders.pending, (state) => {
         state.isLoading = true;
         state.error = null;
       })
       .addCase(fetchGetUserOrders.rejected, (state, action) => {
         state.isLoading = false;
-        state.error = null;
+        state.error = action.error.message || null;
       })
       .addCase(fetchGetUserOrders.fulfilled, (state, action) => {
         state.isLoading = false;

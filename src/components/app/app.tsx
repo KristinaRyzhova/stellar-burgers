@@ -1,10 +1,4 @@
-import {
-  Route,
-  Routes,
-  useLocation,
-  useNavigate,
-  useParams
-} from 'react-router-dom';
+import { Route, Routes, useLocation, useNavigate } from 'react-router-dom';
 import {
   ConstructorPage,
   Feed,
@@ -24,6 +18,8 @@ import { useEffect } from 'react';
 import { fetchIngredients } from '../../services/slices/ingredientsSlice/ingredientsSlice';
 import { useDispatch } from '../../services/store';
 import { ProtectedRoute } from '../protected-route/protected-route';
+import { checkUserAuth } from '../../services/slices/userSlice/userSlice';
+import { TitleWrapper } from '../title-wrapper';
 
 export const App = () => {
   const location = useLocation();
@@ -37,6 +33,7 @@ export const App = () => {
   const dispatch = useDispatch();
   useEffect(() => {
     dispatch(fetchIngredients());
+    dispatch(checkUserAuth());
   }, [dispatch]);
 
   const match = location.pathname.match(/\d+/);
@@ -48,7 +45,6 @@ export const App = () => {
         <AppHeader />
         <Routes location={backgroundLocation || location}>
           <Route path='/' element={<ConstructorPage />} />
-          <Route path='/feed' element={<Feed />} />
           <Route path='/feed' element={<Feed />} />
           <Route
             path='/login'
@@ -78,11 +74,37 @@ export const App = () => {
             path='/profile/orders'
             element={<ProtectedRoute component={<ProfileOrders />} />}
           />
-          <Route path='/feed/:number' element={<OrderInfo />} />
-          <Route path='/ingredients/:id' element={<IngredientDetails />} />
+          <Route
+            path='/profile/orders'
+            element={<ProtectedRoute component={<ProfileOrders />} />}
+          />
+          <Route
+            path='/feed/:number'
+            element={
+              <TitleWrapper>
+                <OrderInfo />
+              </TitleWrapper>
+            }
+          />
+          <Route
+            path='/ingredients/:id'
+            element={
+              <TitleWrapper>
+                <IngredientDetails />
+              </TitleWrapper>
+            }
+          />
           <Route
             path='/profile/orders/:number'
-            element={<ProtectedRoute component={<OrderInfo />} />}
+            element={
+              <ProtectedRoute
+                component={
+                  <TitleWrapper>
+                    <OrderInfo />
+                  </TitleWrapper>
+                }
+              />
+            }
           />
           <Route path='*' element={<NotFound404 />} />
         </Routes>
@@ -99,7 +121,7 @@ export const App = () => {
             <Route
               path='/ingredients/:id'
               element={
-                <Modal title={`Детали ингридиента`} onClose={closeModal}>
+                <Modal title={`Детали ингредиента`} onClose={closeModal}>
                   <IngredientDetails />
                 </Modal>
               }

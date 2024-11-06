@@ -5,6 +5,22 @@
 
 import type { Config } from 'jest';
 
+module.exports = {
+  preset: 'ts-jest',
+  testEnvironment: 'node',
+  moduleNameMapper: {
+    '^@pages(.*)$': '<rootDir>/src/pages$1',
+    '^@components(.*)$': '<rootDir>/src/components$1',
+    '^@ui(.*)$': '<rootDir>/src/components/ui$1',
+    '^@ui-pages(.*)$': '<rootDir>/src/components/ui/pages$1',
+    '^@utils-types(.*)$': '<rootDir>/src/utils/types$1',
+    '^@api(.*)$': '<rootDir>/src/utils/burger-api.ts$1',
+    '^@slices(.*)$': '<rootDir>/src/services/slices$1',
+    '^@selectors(.*)$': '<rootDir>/src/services/selectors$1'
+  },
+  moduleDirectories: ['node_modules', 'src']
+};
+
 const config: Config = {
   preset: 'ts-jest',
   collectCoverage: true,
@@ -20,6 +36,7 @@ const config: Config = {
       }
     ]
   }
+
   // All imported modules in your tests should be mocked automatically
   // automock: false,
 
@@ -32,11 +49,12 @@ const config: Config = {
   // Automatically clear mock calls, instances, contexts and results before every test
   // clearMocks: false,
 
+  // Indicates whether the coverage information should be collected while executing the test
+
   // An array of glob patterns indicating a set of files for which coverage information should be collected
   // collectCoverageFrom: undefined,
 
   // The directory where Jest should output its coverage files
-  // coverageDirectory: undefined,
 
   // An array of regexp pattern strings used to skip coverage collection
   // coveragePathIgnorePatterns: [
